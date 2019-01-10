@@ -48,12 +48,18 @@ namespace Autofac.Integration.ServiceFabric
         {
             ServiceRuntime.RegisterServiceAsync(serviceTypeName, context =>
             {
+                bool initResolved = container.TryResolve<ServiceFabricContainerInitializer>(out ServiceFabricContainerInitializer initializer);
                 var tag = lifetimeScopeTag ?? Constants.DefaultLifetimeScopeTag;
                 var lifetimeScope = container.BeginLifetimeScope(tag, builder =>
                 {
                     builder.RegisterInstance(context)
                         .As<StatelessServiceContext>()
                         .As<ServiceContext>();
+
+                    if (initResolved)
+                    {
+                        initializer.Run(builder);
+                    }
                 });
                 try
                 {
