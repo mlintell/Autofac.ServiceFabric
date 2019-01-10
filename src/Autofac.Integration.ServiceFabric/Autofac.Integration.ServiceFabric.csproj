@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>Autofac integration for Azure Service Fabric. Provides service factory implementations for Actors, Stateful Services and Stateless Services.</Description>
-    <VersionPrefix>2.1.0</VersionPrefix>
+    <VersionPrefix>2.1.1</VersionPrefix>
     <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
     <PlatformTarget>x64</PlatformTarget>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
@@ -18,8 +18,8 @@
     <PackageTags>autofac;di;ioc;dependencyinjection;servicefabric;azure</PackageTags>
     <PackageReleaseNotes>Release notes are at https://github.com/autofac/Autofac.ServiceFabric/releases</PackageReleaseNotes>
     <PackageIconUrl>https://cloud.githubusercontent.com/assets/1156571/13684110/16b8f152-e6bf-11e5-84ae-22c66c6d351a.png</PackageIconUrl>
-    <PackageProjectUrl>http://autofac.org</PackageProjectUrl>
-    <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
+    <PackageProjectUrl>https://autofac.org</PackageProjectUrl>
+    <PackageLicenseUrl>https://opensource.org/licenses/mit-license.php</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/autofac/Autofac.ServiceFabric</RepositoryUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -30,6 +30,8 @@
     <Authors>Autofac Contributors</Authors>
     <Company>Autofac</Company>
     <Product>Autofac</Product>
+    <AssemblyVersion>2.1.1.0</AssemblyVersion>
+    <FileVersion>2.1.1.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

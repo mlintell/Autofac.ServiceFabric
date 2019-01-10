@@ -23,30 +23,22 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-using System.Diagnostics.CodeAnalysis;
-using Castle.DynamicProxy;
+using System;
 
 namespace Autofac.Integration.ServiceFabric
 {
-    [SuppressMessage("Microsoft.Performance", "CA1812", Justification = "Instantiated at runtime via dependency injection")]
-    internal sealed class ServiceInterceptor : IInterceptor
+    public class ServiceFabricContainerInitializer
     {
-        private readonly ILifetimeScope _lifetimeScope;
+        private readonly Action<ContainerBuilder> _initAction;
 
-        public ServiceInterceptor(ILifetimeScope lifetimeScope)
+        public ServiceFabricContainerInitializer(Action<ContainerBuilder> initAction)
         {
-            _lifetimeScope = lifetimeScope;
+            this._initAction = initAction;
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1062", Justification = "The method is only called by Dynamic Proxy and always with a valid parameter.")]
-        public void Intercept(IInvocation invocation)
+        internal void Run(ContainerBuilder builder)
         {
-            invocation.Proceed();
-
-            var methodName = invocation.Method.Name;
-
-            if (methodName == "OnCloseAsync" || methodName == "OnAbort")
-                _lifetimeScope.Dispose();
+            this._initAction.Invoke(builder);
         }
     }
 }

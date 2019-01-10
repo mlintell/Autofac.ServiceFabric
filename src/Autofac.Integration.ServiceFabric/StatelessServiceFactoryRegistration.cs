@@ -1,6 +1,6 @@
 ﻿// This software is part of the Autofac IoC container
 // Copyright © 2017 Autofac Contributors
-// http://autofac.org
+// https://autofac.org
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -48,12 +48,18 @@ namespace Autofac.Integration.ServiceFabric
         {
             ServiceRuntime.RegisterServiceAsync(serviceTypeName, context =>
             {
+                bool initResolved = container.TryResolve<ServiceFabricContainerInitializer>(out ServiceFabricContainerInitializer initializer);
                 var tag = lifetimeScopeTag ?? Constants.DefaultLifetimeScopeTag;
                 var lifetimeScope = container.BeginLifetimeScope(tag, builder =>
                 {
                     builder.RegisterInstance(context)
                         .As<StatelessServiceContext>()
                         .As<ServiceContext>();
+
+                    if (initResolved)
+                    {
+                        initializer.Run(builder);
+                    }
                 });
                 try
                 {
