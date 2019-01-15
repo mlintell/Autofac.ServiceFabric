@@ -30,7 +30,7 @@ namespace Autofac.Integration.ServiceFabric
     internal interface IStatelessServiceFactoryRegistration
     {
         void RegisterStatelessServiceFactory<TService>(
-            ILifetimeScope lifetimeScope, string serviceTypeName, object lifetimeScopeTag = null)
+            ILifetimeScope container, string serviceTypeName, object lifetimeScopeTag = null)
             where TService : StatelessService;
     }
 }

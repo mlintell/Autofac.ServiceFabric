@@ -27,18 +27,18 @@ using System;
 
 namespace Autofac.Integration.ServiceFabric
 {
-    public class ServiceFabricContainerInitializer
+    public class ServiceFabricScopeCallback
     {
-        private readonly Action<ContainerBuilder> _initAction;
+        private readonly Action<ILifetimeScope> _initAction;
 
-        public ServiceFabricContainerInitializer(Action<ContainerBuilder> initAction)
+        public ServiceFabricScopeCallback(Action<ILifetimeScope> initAction)
         {
             this._initAction = initAction;
         }
 
-        internal void Run(ContainerBuilder builder)
+        internal void Invoke(ILifetimeScope scope)
         {
-            this._initAction.Invoke(builder);
+            this._initAction.Invoke(scope);
         }
     }
 }
