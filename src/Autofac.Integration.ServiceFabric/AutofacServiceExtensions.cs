@@ -40,6 +40,7 @@ namespace Autofac.Integration.ServiceFabric
         /// <param name="builder">The container builder.</param>
         /// <param name="serviceTypeName">ServiceTypeName as provided in service manifest.</param>
         /// <param name="lifetimeScopeTag">The tag applied to the <see cref="ILifetimeScope"/> in which the stateful service is hosted.</param>
+        /// <param name="scopeCallback">This callback will be invoked after the <see cref="ILifetimeScope" /> in which the stateless service is hosted has been created.</param>
         /// <typeparam name="TService">The type of the stateful service to register.</typeparam>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
         /// <exception cref="ArgumentException">Thrown when <typeparamref name="TService"/> is not a valid service type.</exception>
@@ -48,14 +49,15 @@ namespace Autofac.Integration.ServiceFabric
             RegisterStatefulService<TService>(
                 this ContainerBuilder builder,
                 string serviceTypeName,
-                object lifetimeScopeTag = null)
+                object lifetimeScopeTag = null,
+                Action<ILifetimeScope> scopeCallback = null)
             where TService : StatefulServiceBase
         {
             var registration = RegisterServiceWithContainer<TService>(builder, serviceTypeName, lifetimeScopeTag);
 
             builder.RegisterBuildCallback(c =>
                 c.Resolve<IStatefulServiceFactoryRegistration>()
-                    .RegisterStatefulServiceFactory<TService>(c, serviceTypeName, lifetimeScopeTag));
+                    .RegisterStatefulServiceFactory<TService>(c, serviceTypeName, lifetimeScopeTag, scopeCallback));
 
             return registration;
         }
@@ -63,25 +65,31 @@ namespace Autofac.Integration.ServiceFabric
         /// <summary>
         /// Registers a stateless service with the container.
         /// </summary>
+        /// <typeparam name="TService">The type of the stateless service to register.</typeparam>
         /// <param name="builder">The container builder.</param>
         /// <param name="serviceTypeName">ServiceTypeName as provided in service manifest.</param>
-        /// <param name="lifetimeScopeTag">The tag applied to the <see cref="ILifetimeScope"/> in which the stateless service is hosted.</param>
-        /// <typeparam name="TService">The type of the stateless service to register.</typeparam>
-        /// <returns>A registration builder allowing further configuration of the component.</returns>
-        /// <exception cref="ArgumentException">Thrown when <typeparamref name="TService"/> is not a valid service type.</exception>
-        /// <remarks>The service will be wrapped in a dynamic proxy and must be public and not sealed.</remarks>
+        /// <param name="lifetimeScopeTag">The tag applied to the <see cref="ILifetimeScope" /> in which the stateless service is hosted.</param>
+        /// <param name="scopeCallback">This callback will be invoked after the <see cref="ILifetimeScope" /> in which the stateless service is hosted has been created.</param>
+        /// <returns>
+        /// A registration builder allowing further configuration of the component.
+        /// </returns>
+        /// <exception cref="ArgumentException">Thrown when <typeparamref name="TService" /> is not a valid service type.</exception>
+        /// <remarks>
+        /// The service will be wrapped in a dynamic proxy and must be public and not sealed.
+        /// </remarks>
         public static IRegistrationBuilder<TService, ConcreteReflectionActivatorData, SingleRegistrationStyle>
             RegisterStatelessService<TService>(
                 this ContainerBuilder builder,
                 string serviceTypeName,
-                object lifetimeScopeTag = null)
+                object lifetimeScopeTag = null,
+                Action<ILifetimeScope> scopeCallback = null)
             where TService : StatelessService
         {
             var registration = RegisterServiceWithContainer<TService>(builder, serviceTypeName, lifetimeScopeTag);
 
             builder.RegisterBuildCallback(c =>
                 c.Resolve<IStatelessServiceFactoryRegistration>()
-                    .RegisterStatelessServiceFactory<TService>(c, serviceTypeName, lifetimeScopeTag));
+                    .RegisterStatelessServiceFactory<TService>(c, serviceTypeName, lifetimeScopeTag, scopeCallback));
 
             return registration;
         }

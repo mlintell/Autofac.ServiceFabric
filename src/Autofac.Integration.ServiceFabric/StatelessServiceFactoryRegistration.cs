@@ -43,12 +43,11 @@ namespace Autofac.Integration.ServiceFabric
         }
 
         public void RegisterStatelessServiceFactory<TService>(
-            ILifetimeScope container, string serviceTypeName, object lifetimeScopeTag = null)
+            ILifetimeScope container, string serviceTypeName, object lifetimeScopeTag = null, Action<ILifetimeScope> scopeCallback = null)
             where TService : StatelessService
         {
             ServiceRuntime.RegisterServiceAsync(serviceTypeName, context =>
             {
-                bool initResolved = container.TryResolve<ServiceFabricScopeCallback>(out ServiceFabricScopeCallback scopeCallback);
                 var tag = lifetimeScopeTag ?? Constants.DefaultLifetimeScopeTag;
 
                 var lifetimeScope = container.BeginLifetimeScope(tag, builder =>
@@ -58,10 +57,7 @@ namespace Autofac.Integration.ServiceFabric
                         .As<ServiceContext>();
                 });
 
-                if (initResolved)
-                {
-                    scopeCallback.Invoke(lifetimeScope);
-                }
+                scopeCallback?.Invoke(lifetimeScope);
 
                 try
                 {

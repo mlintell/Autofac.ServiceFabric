@@ -27,10 +27,12 @@ using Microsoft.ServiceFabric.Services.Runtime;
 
 namespace Autofac.Integration.ServiceFabric
 {
+    using System;
+
     internal interface IStatelessServiceFactoryRegistration
     {
         void RegisterStatelessServiceFactory<TService>(
-            ILifetimeScope container, string serviceTypeName, object lifetimeScopeTag = null)
+            ILifetimeScope container, string serviceTypeName, object lifetimeScopeTag = null, Action<ILifetimeScope> scopeCallback = null)
             where TService : StatelessService;
     }
 }
