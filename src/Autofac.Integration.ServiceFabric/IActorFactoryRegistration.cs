@@ -31,12 +31,13 @@ namespace Autofac.Integration.ServiceFabric
     internal interface IActorFactoryRegistration
     {
         void RegisterActorFactory<TActor>(
-            ILifetimeScope lifetimeScope,
+            ILifetimeScope container,
             Type actorServiceType,
             Func<ActorBase, IActorStateProvider, IActorStateManager> stateManagerFactory = null,
             IActorStateProvider stateProvider = null,
             ActorServiceSettings settings = null,
-            object lifetimeScopeTag = null)
+            object lifetimeScopeTag = null,
+            Action<ILifetimeScope> scopeCallback = null)
             where TActor : ActorBase;
     }
 }

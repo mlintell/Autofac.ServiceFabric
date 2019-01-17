@@ -40,7 +40,7 @@ namespace Autofac.Integration.ServiceFabric
         /// <param name="builder">The container builder.</param>
         /// <param name="serviceTypeName">ServiceTypeName as provided in service manifest.</param>
         /// <param name="lifetimeScopeTag">The tag applied to the <see cref="ILifetimeScope"/> in which the stateful service is hosted.</param>
-        /// <param name="scopeCallback">This callback will be invoked after the <see cref="ILifetimeScope" /> in which the stateless service is hosted has been created.</param>
+        /// <param name="scopeCallback">This callback will be invoked after the <see cref="ILifetimeScope" /> in which the stateful service is hosted has been created.</param>
         /// <typeparam name="TService">The type of the stateful service to register.</typeparam>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
         /// <exception cref="ArgumentException">Thrown when <typeparamref name="TService"/> is not a valid service type.</exception>

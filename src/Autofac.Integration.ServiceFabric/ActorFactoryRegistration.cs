@@ -49,7 +49,8 @@ namespace Autofac.Integration.ServiceFabric
             Func<ActorBase, IActorStateProvider, IActorStateManager> stateManagerFactory = null,
             IActorStateProvider stateProvider = null,
             ActorServiceSettings settings = null,
-            object lifetimeScopeTag = null)
+            object lifetimeScopeTag = null,
+            Action<ILifetimeScope> scopeCallback = null)
             where TActor : ActorBase
         {
             ActorRuntime.RegisterActorAsync<TActor>((context, actorTypeInfo) =>
@@ -57,6 +58,7 @@ namespace Autofac.Integration.ServiceFabric
                 ActorBase ActorFactory(ActorService actorService, ActorId actorId)
                 {
                     var tag = lifetimeScopeTag ?? Constants.DefaultLifetimeScopeTag;
+
                     var lifetimeScope = container.BeginLifetimeScope(tag, builder =>
                     {
                         builder.RegisterInstance(context)
@@ -67,6 +69,9 @@ namespace Autofac.Integration.ServiceFabric
                         builder.RegisterInstance(actorId)
                             .As<ActorId>();
                     });
+
+                    scopeCallback?.Invoke(lifetimeScope);
+
                     try
                     {
                         var actor = lifetimeScope.Resolve<TActor>();
