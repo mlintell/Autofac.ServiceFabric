@@ -1,8 +1,10 @@
-﻿using Autofac.Core;
-using Xunit;
-
-namespace Autofac.Integration.ServiceFabric.Test
+﻿namespace Library.Autofac.ServiceFabric.Test
 {
+    using global::Autofac;
+    using global::Autofac.Core;
+
+    using Xunit;
+
     internal static class Assertions
     {
         internal static void AssertRegistered<TService>(this IComponentContext context)

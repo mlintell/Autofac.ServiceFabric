@@ -8,10 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Autofac.Integration.ServiceFabric {
-    using System;
-    
-    
+namespace Library.Autofac.ServiceFabric {
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>

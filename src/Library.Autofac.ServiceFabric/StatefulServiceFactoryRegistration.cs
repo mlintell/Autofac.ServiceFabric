@@ -23,28 +23,31 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Fabric;
-using Microsoft.ServiceFabric.Services.Runtime;
-
-namespace Autofac.Integration.ServiceFabric
+namespace Library.Autofac.ServiceFabric
 {
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Fabric;
+
+    using global::Autofac;
+
+    using Microsoft.ServiceFabric.Services.Runtime;
+
     // ReSharper disable once ClassNeverInstantiated.Global
     [SuppressMessage("Microsoft.Performance", "CA1812", Justification = "Instantiated at runtime via dependency injection")]
-    internal sealed class StatelessServiceFactoryRegistration : IStatelessServiceFactoryRegistration
+    internal sealed class StatefulServiceFactoryRegistration : IStatefulServiceFactoryRegistration
     {
-        public Action<Exception> ConstructorExceptionCallback { get; }
+        internal Action<Exception> ConstructorExceptionCallback { get; }
 
         // ReSharper disable once UnusedMember.Global
-        public StatelessServiceFactoryRegistration(Action<Exception> constructorExceptionCallback)
+        public StatefulServiceFactoryRegistration(Action<Exception> constructorExceptionCallback)
         {
-            ConstructorExceptionCallback = constructorExceptionCallback;
+            this.ConstructorExceptionCallback = constructorExceptionCallback;
         }
 
-        public void RegisterStatelessServiceFactory<TService>(
+        public void RegisterStatefulServiceFactory<TService>(
             ILifetimeScope container, string serviceTypeName, object lifetimeScopeTag = null, Action<ILifetimeScope> scopeCallback = null)
-            where TService : StatelessService
+            where TService : StatefulServiceBase
         {
             ServiceRuntime.RegisterServiceAsync(serviceTypeName, context =>
             {
@@ -53,7 +56,7 @@ namespace Autofac.Integration.ServiceFabric
                 var lifetimeScope = container.BeginLifetimeScope(tag, builder =>
                 {
                     builder.RegisterInstance(context)
-                        .As<StatelessServiceContext>()
+                        .As<StatefulServiceContext>()
                         .As<ServiceContext>();
                 });
 
@@ -69,7 +72,7 @@ namespace Autofac.Integration.ServiceFabric
                     // Proactively dispose lifetime scope as interceptor will not be called.
                     lifetimeScope.Dispose();
 
-                    ConstructorExceptionCallback(ex);
+                    this.ConstructorExceptionCallback(ex);
                     throw;
                 }
             }).GetAwaiter().GetResult();

@@ -23,15 +23,18 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-using System;
-using Autofac.Builder;
-using Autofac.Core;
-using Autofac.Core.Lifetime;
-using Autofac.Extras.DynamicProxy;
-using Castle.DynamicProxy;
-
-namespace Autofac.Integration.ServiceFabric
+namespace Library.Autofac.ServiceFabric
 {
+    using System;
+
+    using Castle.DynamicProxy;
+
+    using global::Autofac;
+    using global::Autofac.Builder;
+    using global::Autofac.Core;
+    using global::Autofac.Core.Lifetime;
+    using global::Autofac.Extras.DynamicProxy;
+
     /// <summary>
     /// Adds registration syntax to the <see cref="ContainerBuilder"/> type.
     /// </summary>

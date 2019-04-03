@@ -23,34 +23,33 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-using System;
-using System.Globalization;
-using Castle.DynamicProxy;
-
-namespace Autofac.Integration.ServiceFabric
+namespace Library.Autofac.ServiceFabric
 {
-    internal static class TypeExtensions
+    using System.Diagnostics.CodeAnalysis;
+
+    using Castle.DynamicProxy;
+
+    using global::Autofac;
+
+    [SuppressMessage("Microsoft.Performance", "CA1812", Justification = "Instantiated at runtime via dependency injection")]
+    internal sealed class ServiceInterceptor : IInterceptor
     {
-        internal static bool CanBeProxied(this Type type)
+        private readonly ILifetimeScope _lifetimeScope;
+
+        public ServiceInterceptor(ILifetimeScope lifetimeScope)
         {
-            var open = type.IsClass && !type.IsSealed && !type.IsAbstract;
-            var visible = type.IsPublic || ProxyUtil.IsAccessible(type);
-            return open && visible;
+            this._lifetimeScope = lifetimeScope;
         }
 
-        internal static string GetInvalidProxyTypeErrorMessage(this Type type)
+        [SuppressMessage("Microsoft.Design", "CA1062", Justification = "The method is only called by Dynamic Proxy and always with a valid parameter.")]
+        public void Intercept(IInvocation invocation)
         {
-            return string.Format(CultureInfo.CurrentCulture, TypeExtensionsResources.InvalidProxyTypeErrorMessage, type.FullName);
-        }
+            invocation.Proceed();
 
-        internal static string GetServiceNotRegisteredAsInstancePerLifetimeScopeMessage(this Type type)
-        {
-            return string.Format(CultureInfo.CurrentCulture, TypeExtensionsResources.ServiceNotRegisteredAsIntancePerLifetimeScope, type.FullName);
-        }
+            var methodName = invocation.Method.Name;
 
-        internal static string GetInvalidActorServiceTypeErrorMessage(this Type type)
-        {
-            return string.Format(CultureInfo.CurrentCulture, TypeExtensionsResources.InvalidActorServiceTypeErrorMessage, type.FullName);
+            if (methodName == "OnCloseAsync" || methodName == "OnAbort")
+                this._lifetimeScope.Dispose();
         }
     }
 }

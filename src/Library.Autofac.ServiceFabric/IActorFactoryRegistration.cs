@@ -1,5 +1,5 @@
-// This software is part of the Autofac IoC container
-// Copyright � 2017 Autofac Contributors
+﻿// This software is part of the Autofac IoC container
+// Copyright © 2017 Autofac Contributors
 // https://autofac.org
 //
 // Permission is hereby granted, free of charge, to any person
@@ -23,16 +23,24 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-using Microsoft.ServiceFabric.Services.Runtime;
-
-namespace Autofac.Integration.ServiceFabric
+namespace Library.Autofac.ServiceFabric
 {
     using System;
 
-    internal interface IStatefulServiceFactoryRegistration
+    using global::Autofac;
+
+    using Microsoft.ServiceFabric.Actors.Runtime;
+
+    internal interface IActorFactoryRegistration
     {
-        void RegisterStatefulServiceFactory<TService>(
-            ILifetimeScope container, string serviceTypeName, object lifetimeScopeTag = null, Action<ILifetimeScope> scopeCallback = null)
-            where TService : StatefulServiceBase;
+        void RegisterActorFactory<TActor>(
+            ILifetimeScope container,
+            Type actorServiceType,
+            Func<ActorBase, IActorStateProvider, IActorStateManager> stateManagerFactory = null,
+            IActorStateProvider stateProvider = null,
+            ActorServiceSettings settings = null,
+            object lifetimeScopeTag = null,
+            Action<ILifetimeScope> scopeCallback = null)
+            where TActor : ActorBase;
     }
 }

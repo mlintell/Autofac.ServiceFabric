@@ -1,11 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Xunit;
-
-namespace Autofac.Integration.ServiceFabric.Test
+﻿namespace Library.Autofac.ServiceFabric.Test
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using global::Autofac;
+
+    using Library.Autofac.ServiceFabric;
+
+    using Xunit;
+
+    using RegistrationExtensions = RegistrationExtensions;
+
     public sealed class RegistrationExtensionsTests
     {
         [Fact]

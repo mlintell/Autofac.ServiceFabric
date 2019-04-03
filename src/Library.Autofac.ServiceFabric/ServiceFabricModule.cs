@@ -23,11 +23,14 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-using System;
-using Microsoft.ServiceFabric.Actors.Runtime;
-
-namespace Autofac.Integration.ServiceFabric
+namespace Library.Autofac.ServiceFabric
 {
+    using System;
+
+    using global::Autofac;
+
+    using Microsoft.ServiceFabric.Actors.Runtime;
+
     /// <summary>
     /// Autofac module that registers the interceptors required for Service Fabric support.
     /// </summary>
@@ -37,7 +40,7 @@ namespace Autofac.Integration.ServiceFabric
 
         internal ServiceFabricModule(Action<Exception> constructorExceptionCallback = null)
         {
-            _constructorExceptionCallback = constructorExceptionCallback ?? (ex => { });
+            this._constructorExceptionCallback = constructorExceptionCallback ?? (ex => { });
         }
 
         protected override void Load(ContainerBuilder builder)
@@ -50,17 +53,17 @@ namespace Autofac.Integration.ServiceFabric
 
             builder.RegisterType<ActorFactoryRegistration>()
                 .As<IActorFactoryRegistration>()
-                .WithParameter(TypedParameter.From(_constructorExceptionCallback))
+                .WithParameter(TypedParameter.From(this._constructorExceptionCallback))
                 .SingleInstance();
 
             builder.RegisterType<StatelessServiceFactoryRegistration>()
                 .As<IStatelessServiceFactoryRegistration>()
-                .WithParameter(TypedParameter.From(_constructorExceptionCallback))
+                .WithParameter(TypedParameter.From(this._constructorExceptionCallback))
                 .SingleInstance();
 
             builder.RegisterType<StatefulServiceFactoryRegistration>()
                 .As<IStatefulServiceFactoryRegistration>()
-                .WithParameter(TypedParameter.From(_constructorExceptionCallback))
+                .WithParameter(TypedParameter.From(this._constructorExceptionCallback))
                 .SingleInstance();
 
             builder.RegisterType<ActorService>()

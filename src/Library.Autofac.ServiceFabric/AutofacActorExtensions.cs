@@ -23,12 +23,15 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-using System;
-using Autofac.Builder;
-using Microsoft.ServiceFabric.Actors.Runtime;
-
-namespace Autofac.Integration.ServiceFabric
+namespace Library.Autofac.ServiceFabric
 {
+    using System;
+
+    using global::Autofac;
+    using global::Autofac.Builder;
+
+    using Microsoft.ServiceFabric.Actors.Runtime;
+
     /// <summary>
     /// Extension methods for registering actors with Autofac and Service Fabric.
     /// </summary>

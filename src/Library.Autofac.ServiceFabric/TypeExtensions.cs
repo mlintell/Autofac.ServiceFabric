@@ -23,28 +23,35 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-using System.Diagnostics.CodeAnalysis;
-using Castle.DynamicProxy;
-
-namespace Autofac.Integration.ServiceFabric
+namespace Library.Autofac.ServiceFabric
 {
-    [SuppressMessage("Microsoft.Performance", "CA1812", Justification = "Instantiated at runtime via dependency injection")]
-    internal sealed class ActorInterceptor : IInterceptor
-    {
-        private readonly ILifetimeScope _lifetimeScope;
+    using System;
+    using System.Globalization;
 
-        public ActorInterceptor(ILifetimeScope lifetimeScope)
+    using Castle.DynamicProxy;
+
+    internal static class TypeExtensions
+    {
+        internal static bool CanBeProxied(this Type type)
         {
-            _lifetimeScope = lifetimeScope;
+            var open = type.IsClass && !type.IsSealed && !type.IsAbstract;
+            var visible = type.IsPublic || ProxyUtil.IsAccessible(type);
+            return open && visible;
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1062", Justification = "The method is only called by Dynamic Proxy and always with a valid parameter.")]
-        public void Intercept(IInvocation invocation)
+        internal static string GetInvalidProxyTypeErrorMessage(this Type type)
         {
-            invocation.Proceed();
+            return string.Format(CultureInfo.CurrentCulture, TypeExtensionsResources.InvalidProxyTypeErrorMessage, type.FullName);
+        }
 
-            if (invocation.Method.Name == "OnDeactivateAsync")
-                _lifetimeScope.Dispose();
+        internal static string GetServiceNotRegisteredAsInstancePerLifetimeScopeMessage(this Type type)
+        {
+            return string.Format(CultureInfo.CurrentCulture, TypeExtensionsResources.ServiceNotRegisteredAsIntancePerLifetimeScope, type.FullName);
+        }
+
+        internal static string GetInvalidActorServiceTypeErrorMessage(this Type type)
+        {
+            return string.Format(CultureInfo.CurrentCulture, TypeExtensionsResources.InvalidActorServiceTypeErrorMessage, type.FullName);
         }
     }
 }

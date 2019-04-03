@@ -1,4 +1,4 @@
-﻿namespace Autofac.Integration.ServiceFabric
+﻿namespace Library.Autofac.ServiceFabric
 {
     internal static class Constants
     {

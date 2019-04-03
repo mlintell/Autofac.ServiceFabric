@@ -1,16 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Fabric;
-using Autofac.Core;
-using Autofac.Core.Lifetime;
-using Microsoft.ServiceFabric.Data;
-using Microsoft.ServiceFabric.Services.Runtime;
-using Moq;
-using Test.Scenario.InternalsVisible;
-using Xunit;
-
-namespace Autofac.Integration.ServiceFabric.Test
+﻿namespace Library.Autofac.ServiceFabric.Test
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Fabric;
+
+    using global::Autofac;
+    using global::Autofac.Core;
+    using global::Autofac.Core.Lifetime;
+
+    using global::Test.Scenario.InternalsVisible;
+
+    using Microsoft.ServiceFabric.Data;
+    using Microsoft.ServiceFabric.Services.Runtime;
+
+    using Moq;
+
+    using Xunit;
+
     public sealed class AutofacServiceExtensionsTests
     {
         [Fact]

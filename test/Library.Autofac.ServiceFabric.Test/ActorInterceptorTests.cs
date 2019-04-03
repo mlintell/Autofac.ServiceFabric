@@ -1,9 +1,13 @@
-﻿using Moq;
-using Xunit;
-using IInvocation = Castle.DynamicProxy.IInvocation;
-
-namespace Autofac.Integration.ServiceFabric.Test
+﻿namespace Library.Autofac.ServiceFabric.Test
 {
+    using global::Autofac;
+
+    using Moq;
+
+    using Xunit;
+
+    using IInvocation = Castle.DynamicProxy.IInvocation;
+
     public sealed class ActorInterceptorTests
     {
         [Fact]

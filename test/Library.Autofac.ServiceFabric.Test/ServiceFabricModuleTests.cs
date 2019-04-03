@@ -1,8 +1,11 @@
-﻿using System;
-using Xunit;
-
-namespace Autofac.Integration.ServiceFabric.Test
+﻿namespace Library.Autofac.ServiceFabric.Test
 {
+    using System;
+
+    using global::Autofac;
+
+    using Xunit;
+
     public sealed class ServiceFabricModuleTests
     {
         [Theory]

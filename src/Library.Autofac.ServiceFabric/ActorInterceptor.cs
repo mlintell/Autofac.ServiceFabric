@@ -1,5 +1,5 @@
-// This software is part of the Autofac IoC container
-// Copyright � 2017 Autofac Contributors
+﻿// This software is part of the Autofac IoC container
+// Copyright © 2017 Autofac Contributors
 // https://autofac.org
 //
 // Permission is hereby granted, free of charge, to any person
@@ -23,16 +23,31 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-using Microsoft.ServiceFabric.Services.Runtime;
-
-namespace Autofac.Integration.ServiceFabric
+namespace Library.Autofac.ServiceFabric
 {
-    using System;
+    using System.Diagnostics.CodeAnalysis;
 
-    internal interface IStatelessServiceFactoryRegistration
+    using Castle.DynamicProxy;
+
+    using global::Autofac;
+
+    [SuppressMessage("Microsoft.Performance", "CA1812", Justification = "Instantiated at runtime via dependency injection")]
+    internal sealed class ActorInterceptor : IInterceptor
     {
-        void RegisterStatelessServiceFactory<TService>(
-            ILifetimeScope container, string serviceTypeName, object lifetimeScopeTag = null, Action<ILifetimeScope> scopeCallback = null)
-            where TService : StatelessService;
+        private readonly ILifetimeScope _lifetimeScope;
+
+        public ActorInterceptor(ILifetimeScope lifetimeScope)
+        {
+            this._lifetimeScope = lifetimeScope;
+        }
+
+        [SuppressMessage("Microsoft.Design", "CA1062", Justification = "The method is only called by Dynamic Proxy and always with a valid parameter.")]
+        public void Intercept(IInvocation invocation)
+        {
+            invocation.Proceed();
+
+            if (invocation.Method.Name == "OnDeactivateAsync")
+                this._lifetimeScope.Dispose();
+        }
     }
 }

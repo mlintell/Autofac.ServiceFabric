@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Autofac.Integration.ServiceFabric\Autofac.Integration.ServiceFabric.csproj" />
+    <ProjectReference Include="..\..\src\Library.Autofac.ServiceFabric\Library.Autofac.ServiceFabric.csproj" />
     <ProjectReference Include="..\Test.Scenario.InternalsVisible\Test.Scenario.InternalsVisible.csproj" />
   </ItemGroup>
 

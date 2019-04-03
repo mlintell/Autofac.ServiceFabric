@@ -23,12 +23,15 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-using System;
-using Autofac.Builder;
-using Microsoft.ServiceFabric.Services.Runtime;
-
-namespace Autofac.Integration.ServiceFabric
+namespace Library.Autofac.ServiceFabric
 {
+    using System;
+
+    using global::Autofac;
+    using global::Autofac.Builder;
+
+    using Microsoft.ServiceFabric.Services.Runtime;
+
     /// <summary>
     /// Extension methods for registering services (stateful and stateless) with Autofac and Service Fabric.
     /// </summary>
